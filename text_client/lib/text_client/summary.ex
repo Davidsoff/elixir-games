@@ -3,9 +3,10 @@ defmodule TextClient.Summary do
 
   def display(state = %State{tally: tally}) do
     IO.puts [
-      "\n",
+      "#{IO.ANSI.clear()}",
       "Word so far: #{Enum.join(tally.letters, " ")}\n",
       "Guesses left: #{tally.turns_left}\n",
+      "Letters used: #{Enum.join(tally.used, " ")}\n\n",
     ]
     state
   end

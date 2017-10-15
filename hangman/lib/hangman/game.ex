@@ -20,7 +20,8 @@ defmodule Hangman.Game do
   end
 
   def new_game() do
-    Dictionary.random_word
+    Dictionary.start()
+    |> Dictionary.random_word()
     |> new_game
   end
 
@@ -38,7 +39,8 @@ defmodule Hangman.Game do
     %{
       game_state: game.game_state,
       turns_left: game.turns_left,
-      letters:    game.letters |> reveal_guessed(game.used)
+      letters:    game.letters |> reveal_guessed(game.used),
+      used:       game.used,
     }
   end
 
