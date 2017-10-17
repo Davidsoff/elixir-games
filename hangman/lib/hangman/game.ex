@@ -20,19 +20,20 @@ defmodule Hangman.Game do
   end
 
   def new_game() do
-    Dictionary.start()
-    |> Dictionary.random_word()
+    Dictionary.random_word()
     |> new_game
   end
 
   def make_move(game = %Game{game_state: state}, _guess)
   when state in [:won, :lost] do
     game
+    |> return_with_tally()
   end
 
   def make_move(game, guess) do
-    game = accept_move(game, guess, MapSet.member?(game.used, guess))
     game
+    |> accept_move(guess, MapSet.member?(game.used, guess))
+    |> return_with_tally()
   end
 
   def tally(game) do
@@ -75,12 +76,12 @@ defmodule Hangman.Game do
     }
   end
 
-
-
   defp reveal_guessed(letters, used) do
     letters
     |> Enum.map(fn letter -> reveal_letter(letter, MapSet.member?(used, letter)) end)
   end
+
+  defp return_with_tally(game), do: {game, tally(game)}
 
   defp reveal_letter(letter, _in_word = true), do: letter
   defp reveal_letter(_letter, _not_in_word),   do: "_"
